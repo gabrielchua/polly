@@ -31,7 +31,7 @@ st.title("Polly 🦜")
 tab1, tab2 = st.tabs(["Text to Speech", "Speech to Text"])
 
 with tab1:
-    st.warning("Please enter text classified up to **Restricted (Sensitive Normal)**", icon="🚨")
+    st.warning(st.secrets["tts_disclaimer"], icon="🚨")
     text = st.text_area("Enter text", "Hello, how are you?")
     voice = st.radio("Voice", VOICES, horizontal = True)
     if text is not None:
@@ -51,7 +51,7 @@ with tab1:
                                 mime="audio/mp3")
 
 with tab2:
-    st.warning("Please enter audio files classified up to Official (Closed)", icon="🚨")
+    st.warning(st.secrets["stt_disclaimer"], icon="🚨")
     audio_file = st.file_uploader("Upload audio file", type=["mp3", "wav"])
     # language = st.radio("Language", list(LANGUAGES.keys()), horizontal = True)
     if audio_file is not None:
