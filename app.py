@@ -2,15 +2,6 @@
 app.py
 """
 import streamlit as st
-from openai.error import (
-    Timeout,
-    APIError,
-    APIConnectionError,
-    AuthenticationError,
-    PermissionError,
-    RateLimitError,
-    NotFoundError
-)
 
 from utils import (
     check_password,
@@ -39,7 +30,7 @@ with tab1:
             with st.spinner("Generating audio - this takes about 20 to 30 seconds..."):
                 try:
                     text_to_speech(text, voice)
-                except (Timeout, APIError, APIConnectionError, AuthenticationError, PermissionError, RateLimitError, NotFoundError):
+                except:
                     st.warning("Unexpected error occurred. Please try again in ~ 1 minute.", icon="⚠️")
                     st.stop()
             audio_file = open("audio.mp3", 'rb')
@@ -59,7 +50,7 @@ with tab2:
             with st.spinner("Transcribing audio - this takes about 20 to 30 seconds..."):
                 try:
                     transcription = speech_to_text(audio_file)
-                except (Timeout, APIError, APIConnectionError, AuthenticationError, PermissionError, RateLimitError, NotFoundError):
+                except:
                     st.warning("Unexpected error occurred. Please try again in ~ 1 minute.", icon="⚠️")
                     st.stop()
             st.write(transcription)
