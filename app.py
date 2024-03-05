@@ -25,6 +25,7 @@ with tab1:
     st.warning(st.secrets["tts_disclaimer"], icon="🚨")
     text = st.text_area("Enter text", "Hello, how are you?")
     voice = st.radio("Voice", VOICES, horizontal = True)
+    st.write("🎙️ You can find a demo of these voices [here](https://platform.openai.com/docs/guides/text-to-speech/voice-options).")
     if text is not None:
         if st.button("Generate"):
             with st.spinner("Generating audio - this takes about 20 to 30 seconds..."):
