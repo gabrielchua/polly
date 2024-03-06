@@ -45,13 +45,20 @@ with tab1:
 with tab2:
     st.warning(st.secrets["stt_disclaimer"], icon="🚨")
     audio_file = st.file_uploader("Upload audio file", type=["mp3", "wav"])
+    include_timestamp = st.checkbox("Include timestamp")
     # language = st.radio("Language", list(LANGUAGES.keys()), horizontal = True)
     if audio_file is not None:
         if st.button("Transcribe"):
-            with st.spinner("Transcribing audio - this takes about 20 to 30 seconds..."):
-                try:
-                    transcription = speech_to_text(audio_file)
-                except:
-                    st.warning("Unexpected error occurred. Please try again in ~ 1 minute.", icon="⚠️")
-                    st.stop()
-            st.write(transcription)
+            try:
+                with st.spinner("Transcribing audio - this takes about 20 to 30 seconds..."):
+                    transcription = speech_to_text(audio_file, include_timestamp)
+            except:
+                st.warning("Unexpected error occurred. Please try again in ~ 1 minute.", icon="⚠️")
+                st.stop()
+
+            if include_timestamp:
+                st.info(transcription[1])
+                st.subheader("With timestamps")
+                st.dataframe(transcription[0])
+            else:
+                st.info(transcription)

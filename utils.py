@@ -1,6 +1,7 @@
 import hmac
 from pathlib import Path
 
+import pandas as pd
 import streamlit as st
 from openai import AzureOpenAI
 
@@ -38,10 +39,25 @@ def text_to_speech(text, voice):
     )
     response.stream_to_file(speech_file_path)
 
-def speech_to_text(audio_file, language="en"):
-    transcription = client.audio.transcriptions.create(
-        file=audio_file,
-        language=language,
-        model="whisper"
+def speech_to_text(audio_file, include_time_stamp = False, language="en"):
+    if include_time_stamp:
+        transcription = client.audio.transcriptions.create(
+            file=audio_file,
+            language=language,
+            model="whisper",
+            response_format="verbose_json",
+            timestamp_granularities=["segment"]
         )
-    return transcription.text
+
+        df = pd.DataFrame(transcription.segments)
+        df = df[["start", "end", "text"]]
+    
+        return df, transcription.text
+    
+    else:
+        transcription = client.audio.transcriptions.create(
+            file=audio_file,
+            language=language,
+            model="whisper"
+            )
+        return transcription.text
